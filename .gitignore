@@ -1,0 +1,6 @@
+# Original tickets before redaction - never commit
+raw_tickets.csv
+# dbt build output
+dbt/target/
+dbt/logs/
+dbt/profiles.yml

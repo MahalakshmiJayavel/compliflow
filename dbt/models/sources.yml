@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: bronze
+    database: compliflow
+    schema: bronze
+    tables:
+      - name: raw_tickets
+      - name: raw_ticket_events
+      - name: raw_pii_audit_log

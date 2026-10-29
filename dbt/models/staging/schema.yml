@@ -1,0 +1,61 @@
+version: 2
+
+models:
+  - name: stg_tickets
+    description: "One row per support ticket, with real timestamps. Message text is already redacted."
+    columns:
+      - name: ticket_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - not_null
+      - name: category
+        tests:
+          - accepted_values:
+              values: ['Billing', 'Delivery', 'Returns', 'Account Access', 'Product Issue']
+      - name: priority
+        tests:
+          - accepted_values:
+              values: ['P1', 'P2', 'P3']
+      - name: created_at
+        tests:
+          - not_null
+
+  - name: stg_ticket_events
+    description: "One row per ticket status change."
+    columns:
+      - name: event_id
+        tests:
+          - unique
+          - not_null
+      - name: ticket_id
+        tests:
+          - relationships:
+              to: ref('stg_tickets')
+              field: ticket_id
+      - name: event_type
+        tests:
+          - accepted_values:
+              values: ['opened', 'assigned', 'resolved', 'reopened']
+      - name: event_at
+        tests:
+          - not_null
+
+  - name: stg_pii_audit_log
+    description: "One row per PII detection. Stores type, score and position only, never the value."
+    columns:
+      - name: audit_id
+        tests:
+          - unique
+          - not_null
+      - name: ticket_id
+        tests:
+          - relationships:
+              to: ref('stg_tickets')
+              field: ticket_id
+      - name: entity_type
+        tests:
+          - accepted_values:
+              values: ['PERSON', 'EMAIL_ADDRESS', 'PHONE_NUMBER', 'IBAN_CODE']

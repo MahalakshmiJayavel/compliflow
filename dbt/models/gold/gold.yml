@@ -1,0 +1,45 @@
+version: 2
+
+models:
+  - name: fct_tickets
+    columns:
+      - name: ticket_id
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - relationships:
+              to: ref('dim_customer')
+              field: customer_id
+      - name: category
+        tests:
+          - relationships:
+              to: ref('dim_category')
+              field: category
+      - name: priority
+        tests:
+          - relationships:
+              to: ref('dim_priority')
+              field: priority
+
+  - name: dim_customer
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_category
+    columns:
+      - name: category
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_priority
+    columns:
+      - name: priority
+        tests:
+          - unique
+          - not_null
